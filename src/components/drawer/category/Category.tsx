@@ -7,7 +7,7 @@ import categoryService from "../../../services/category.service";
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     highlighted: {
-      color: 'red'
+      color: '#F2B97E'
     }
   }),
 );

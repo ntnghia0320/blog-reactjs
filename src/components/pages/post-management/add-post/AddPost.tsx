@@ -12,7 +12,7 @@ const AddPost = () => {
     const [categoryId, setIdCategory] = useState(-1);
     const [categories, setCategories] = useState(categoriesDefalut);
     const [tags, setTags] = useState(tagsDefault);
-  
+
     useEffect(() => {
         categoryService.getCategories().then(
             (res) => {
@@ -23,7 +23,7 @@ const AddPost = () => {
             }
         );
         console.log('add post');
-        
+
     }, []);
 
     const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -32,16 +32,16 @@ const AddPost = () => {
 
     const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        
+
         const today = new Date();
-        const date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+        const date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
         const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-        const dateTime = date+' '+time;
+        const dateTime = date + ' ' + time;
 
         post.createAt = dateTime;
         post.tags = tags;
         // alert(JSON.stringify(post)+idCategory+idUser);
-        
+
         postService.postPosts(post, categoryId).then(
             (response) => {
                 // history.push("/home");
@@ -61,52 +61,61 @@ const AddPost = () => {
         setTags([...tags, tag]);
     };
 
-    const deleteTag = (event: any, tagName: string)=>{
+    const deleteTag = (event: any, tagName: string) => {
         event.preventDefault();
         setTags(tags.filter(tag => tag.name !== tagName))
     }
 
     return (
         <form onSubmit={onSubmit}>
-        <div>
-            <input
-                name='title'
-                id='title'
-                type='text'
-                placeholder='Title'
-                onChange={onChange}
-                required
-            />
+            <div>
+                <input
+                    name='title'
+                    id='title'
+                    type='text'
+                    placeholder='Title'
+                    onChange={onChange}
+                    required
+                />
 
-            <input
-                name='content'
-                id='content'
-                type='text'
-                placeholder='Content'
-                onChange={onChange}
-                required
-            />
+                <input
+                    name='content'
+                    id='content'
+                    type='text'
+                    placeholder='Content'
+                    onChange={onChange}
+                    required
+                />
 
-            <select defaultValue={-1} onChange={(event)=> handleChoiceChange(Number(event.currentTarget.value))}>
-                <option value={-1}>Select category</option>
-                {
-                    categories.map(category => <option key={category.id} value={category.id}>{category.name}</option>)
-                }
-            </select>
+                <input
+                    name='linkImage'
+                    id='linkImage'
+                    type='text'
+                    placeholder='Link Image'
+                    onChange={onChange}
+                    required
+                />
 
-            <AddTag addTag={addTag}></AddTag>
-            
-            <ul>
-                {
-                    tags.map(tag => (
-                        <li key={tag.name}>
-                            <p >{tag.name}</p>
-                            <a href={`/post-management/add-post/delete-tag`} onClick={(event) => deleteTag(event, tag.name)}>Delete</a>
-                        </li>
-                    ))
-                }
-            </ul>
-            <button type='submit'>Add Post</button>
+                <select defaultValue={-1} onChange={(event) => handleChoiceChange(Number(event.currentTarget.value))}>
+                    <option value={-1}>Select category</option>
+                    {
+                        categories.map(category => <option key={category.id} value={category.id}>{category.name}</option>)
+                    }
+                </select>
+
+                <AddTag addTag={addTag}></AddTag>
+
+                <ul>
+                    {
+                        tags.map(tag => (
+                            <li key={tag.name}>
+                                <p >{tag.name}</p>
+                                <a href={`/post-management/add-post/delete-tag`} onClick={(event) => deleteTag(event, tag.name)}>Delete</a>
+                            </li>
+                        ))
+                    }
+                </ul>
+                <button type='submit'>Add Post</button>
             </div>
         </form>
     );

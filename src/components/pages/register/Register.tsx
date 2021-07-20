@@ -19,49 +19,49 @@ const Register = () => {
             },
             (error) => {
                 alert(error.response.data.message);
-              });
+            });
     };
 
     return (
         <form onSubmit={onSubmit}>
-        <div>
-            <input
-                name='firstName'
-                id='firstName'
-                type='text'
-                placeholder='First Name'
-                onChange={onChange}
-                required
-            />
+            <div>
+                <input
+                    name='firstName'
+                    id='firstName'
+                    type='text'
+                    placeholder='First Name'
+                    onChange={onChange}
+                    required
+                />
 
-            <input
-                name='lastName'
-                id='lastName'
-                type='text'
-                placeholder='Last Name'
-                onChange={onChange}
-                required
-            />
+                <input
+                    name='lastName'
+                    id='lastName'
+                    type='text'
+                    placeholder='Last Name'
+                    onChange={onChange}
+                    required
+                />
 
-            <input
-                name='email'
-                id='email'
-                type='email'
-                placeholder='Email'
-                onChange={onChange}
-                required
-            />
+                <input
+                    name='email'
+                    id='email'
+                    type='email'
+                    placeholder='Email'
+                    onChange={onChange}
+                    required
+                />
 
-            <input
-                name='password'
-                id='password'
-                type='password'
-                placeholder='Password'
-                onChange={onChange}
-                required
-            />
-            <button type='submit'>Register</button>
-        </div>
+                <input
+                    name='password'
+                    id='password'
+                    type='password'
+                    placeholder='Password'
+                    onChange={onChange}
+                    required
+                />
+                <button type='submit'>Register</button>
+            </div>
         </form>
     );
 };

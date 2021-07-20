@@ -7,7 +7,7 @@ const headers = {
 }
 
 const register = async (userRegister: UserRegister) => {
-  const response = await axios.post(API_URL + "register-user", JSON.stringify(userRegister), { headers: headers });
+  const response = await axios.post(API_URL + "register", JSON.stringify(userRegister), { headers: headers });
   return response.data;
 };
 

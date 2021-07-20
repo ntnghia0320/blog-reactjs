@@ -15,10 +15,9 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import MoreIcon from '@material-ui/icons/MoreVert';
-import { BrowserRouter, NavLink, Redirect, Route, Switch } from 'react-router-dom';
+import { NavLink, Redirect, Route, Switch } from 'react-router-dom';
 import Login from './components/pages/login/login';
 import NotFound from './components/pages/not-found/NotFound';
-import PostManagement from './components/pages/post-management/PostManagement';
 import Profile from './components/pages/profile/Profile';
 import Register from './components/pages/register/Register';
 import UserManagement from './components/pages/user-management/UserManagement';
@@ -27,7 +26,7 @@ import AllPost from './components/pages/home/posts/AllPost';
 import PostListOrderByCategory from './components/pages/home/posts/PostListOrderByCategory';
 import PostDetail from './components/pages/home/posts/PostDetail';
 import userService from './services/user.service';
-import { Button } from '@material-ui/core';
+import { Button, List, ListItem, ListItemText } from '@material-ui/core';
 import history from './helpers/history';
 import Category from './components/drawer/category/Category';
 import AddPost from './components/pages/post-management/add-post/AddPost';
@@ -55,7 +54,11 @@ const useStyles = makeStyles((theme: Theme) =>
       [theme.breakpoints.up('sm')]: {
         width: `calc(100% - ${drawerWidth}px)`,
         marginLeft: drawerWidth,
+        backgroundImage: 'linear-gradient(to bottom right, #fdfcfb, #e2d1c3)',
+        color: '#333333'
       },
+      backgroundImage: 'linear-gradient(to bottom right, #fdfcfb, #e2d1c3)',
+      color: '#333333'
     },
     menuButton: {
       marginRight: theme.spacing(2),
@@ -72,9 +75,9 @@ const useStyles = makeStyles((theme: Theme) =>
     search: {
       position: 'relative',
       borderRadius: theme.shape.borderRadius,
-      backgroundColor: alpha(theme.palette.common.white, 0.15),
+      backgroundImage: 'linear-gradient(to bottom right, #FCEBCF, #e2d1c3)',
       '&:hover': {
-        backgroundColor: alpha(theme.palette.common.white, 0.25),
+        backgroundImage: 'linear-gradient(to bottom right, #FCEBCF, #e2d1c3)',
       },
       marginRight: theme.spacing(2),
       marginLeft: 0,
@@ -120,13 +123,16 @@ const useStyles = makeStyles((theme: Theme) =>
     toolbar: theme.mixins.toolbar,
     drawerPaper: {
       width: drawerWidth,
+      backgroundImage: 'linear-gradient(to bottom right, #fdfcfb, #e2d1c3)'
     },
     content: {
       flexGrow: 1,
       padding: theme.spacing(3),
+      minHeight: '100vh',
+      backgroundImage: 'linear-gradient(to bottom right, #fdfcfb, #e2d1c3)'
     },
     highlighted: {
-      color: 'red'
+      color: '#F2B97E'
     }
   }),
 );
@@ -270,18 +276,26 @@ export default function App() {
           <Category />
         </Route>
         <Route path='/post-management'>
-          <header>
-              <nav>
-                  <ul>
-                      <li>
-                          <NavLink to='/post-management/add-post'>Add post</NavLink>
-                      </li>
-                      <li>
-                          <NavLink to='/post-management/edit-post'>Edit post</NavLink>
-                      </li>
-                  </ul>
-              </nav>
-          </header>
+          <List>
+            <ListItem
+                button
+                key={1}
+                component={NavLink}
+                activeClassName={classes.highlighted}
+                to={`/post-management/add-post`}
+            >
+                <ListItemText primary={'Add post'} />
+            </ListItem>
+            <ListItem
+                button
+                key={2}
+                component={NavLink}
+                activeClassName={classes.highlighted}
+                to={`/post-management/edit-post`}
+            >
+                <ListItemText primary={'Edit post'} />
+            </ListItem>
+        </List>
         </Route>
       </Switch>
     </div>

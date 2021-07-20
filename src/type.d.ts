@@ -1,16 +1,16 @@
-interface UserRegister{
+interface UserRegister {
     firstName: string,
     lastName: string,
     email: string,
     password: string
 }
 
-interface UserLogin{
+interface UserLogin {
     email: string,
     password: string
 }
 
-interface UserInfo{
+interface UserInfo {
     userId: number,
     token: string,
     type: string,
@@ -18,7 +18,7 @@ interface UserInfo{
     role: string
 }
 
-interface User{
+interface User {
     id: number,
     firstName: string,
     lastName: string,
@@ -26,19 +26,20 @@ interface User{
     role: Role
 }
 
-interface Role{
+interface Role {
     id: number,
     name: string
 }
 
-interface Category{
+interface Category {
     id: number,
     name: string
 }
 
-interface Post{
+interface Post {
     id?: number;
     title: string,
+    linkImage: string,
     content: string,
     createAt: string,
     updateAt?: string,
@@ -48,7 +49,7 @@ interface Post{
     active?: boolean
 }
 
-interface Tag{
+interface Tag {
     id?: number,
     name: string
 }
