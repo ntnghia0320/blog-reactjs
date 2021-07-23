@@ -37,15 +37,16 @@ const useStyles = makeStyles((theme: Theme) =>
             maxWidth: '100%'
         },
         tags: {
-            display: 'inline'
+            // display: 'inline',
         },
         tag: {
-            display: 'inline',
+            display: 'inline-block',
             marginLeft: 4,
             border: '1px solid grey',
             borderRadius: 4,
             padding: 3,
-            backgroundColor: '#f2f2f2'
+            marginTop: 4,
+            backgroundColor: '#FCEBCF'
         }
     }),
 );

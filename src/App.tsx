@@ -9,7 +9,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import HomeIcon from '@material-ui/icons/Home';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles, useTheme, Theme, createStyles, alpha } from '@material-ui/core/styles';
+import { makeStyles, useTheme, Theme, createStyles } from '@material-ui/core/styles';
 import InputBase from '@material-ui/core/InputBase';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
@@ -26,12 +26,13 @@ import AllPost from './components/pages/home/posts/AllPost';
 import PostListOrderByCategory from './components/pages/home/posts/PostListOrderByCategory';
 import PostDetail from './components/pages/home/posts/PostDetail';
 import userService from './services/user.service';
-import { Button, List, ListItem, ListItemText } from '@material-ui/core';
+import { Button} from '@material-ui/core';
 import history from './helpers/history';
 import Category from './components/drawer/category/Category';
 import AddPost from './components/pages/post-management/add-post/AddPost';
-import EditPostDetail from './components/pages/post-management/edit-post/EditPostDetail';
 import EditPostList from './components/pages/post-management/edit-post/EditPostList';
+import PostManagement from './components/pages/post-management/PostManagement';
+import PostListFindByKeyword from './components/pages/home/posts/PostListFindByKeyword';
 
 const drawerWidth = 240;
 
@@ -123,16 +124,25 @@ const useStyles = makeStyles((theme: Theme) =>
     toolbar: theme.mixins.toolbar,
     drawerPaper: {
       width: drawerWidth,
-      backgroundImage: 'linear-gradient(to bottom right, #fdfcfb, #e2d1c3)'
+      backgroundImage: 'linear-gradient(to bottom right, #fdfcfb, #e2d1c3)',
     },
     content: {
       flexGrow: 1,
       padding: theme.spacing(3),
       minHeight: '100vh',
+      maxWidth: '100%',
       backgroundImage: 'linear-gradient(to bottom right, #fdfcfb, #e2d1c3)'
     },
     highlighted: {
       color: '#F2B97E'
+    },
+    categoryTitle:{
+      minHeight: '64px',
+      display: 'flex',
+      alignItems: 'center',
+      textAlign: 'left',
+      marginInlineStart: theme.spacing(2),
+      fontSize: 25,
     }
   }),
 );
@@ -262,20 +272,36 @@ export default function App() {
   const classes = useStyles();
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [keyword, setKeyword] = React.useState('');
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
 
+  const handleKeyDown = (event: any) => {
+    if (event.key === 'Enter') {
+      history.push("/posts/search/keyword="+keyword);
+      window.location.reload();
+    }
+  }
+
+  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setKeyword(event.target.value);
+  };
+
   const drawer = (
     <div>
-      <div className={classes.toolbar} />
+      <div className={classes.toolbar}>
+        <div className={classes.categoryTitle}>
+          Category
+        </div>
+      </div>
       <Divider />
       <Switch>
-        <Route path={['/home', '/category', '/post']}>
+        <Route path={['/home', '/category', '/post', '/posts']}>
           <Category />
         </Route>
-        <Route path='/post-management'>
+        {/* <Route path='/post-management'>
           <List>
             <ListItem
                 button
@@ -296,7 +322,7 @@ export default function App() {
                 <ListItemText primary={'Edit post'} />
             </ListItem>
         </List>
-        </Route>
+        </Route> */}
       </Switch>
     </div>
   );
@@ -326,7 +352,7 @@ export default function App() {
             <HomeIcon />
           </IconButton>
           <Typography className={classes.title} variant="h6" noWrap>
-            Material-UI
+            NghiaNguyen Blog
           </Typography>
           <div className={classes.search}>
             <div className={classes.searchIcon}>
@@ -339,6 +365,8 @@ export default function App() {
                 input: classes.inputInput,
               }}
               inputProps={{ 'aria-label': 'search' }}
+              onKeyDown={handleKeyDown}
+              onChange={onChange}
             />
           </div>
           <div className={classes.grow} />
@@ -349,7 +377,7 @@ export default function App() {
                   color="inherit"
                   component={NavLink}
                   activeClassName={classes.highlighted}
-                  to="/post-management/add-post"
+                  to="/post-management"
                 >
                   Post Management
                 </Button>
@@ -473,11 +501,17 @@ export default function App() {
           <Route path='/post/:postId'>
             <PostDetail />
           </Route>
+          <Route path='/posts/search/keyword=:keyword' >
+            <PostListFindByKeyword />
+          </Route>
           <Route path='/register'>
             <Register />
           </Route>
           <Route path='/login'>
             <Login />
+          </Route>
+          <Route exact path='/post-management'>
+            <PostManagement />
           </Route>
           <Route path='/post-management/add-post'>
               <AddPost />
@@ -485,9 +519,9 @@ export default function App() {
           <Route path='/post-management/edit-post'>
               <EditPostList />
           </Route>
-          <Route path='/post-management/edit-post-detail/:postId'>
+          {/* <Route path='/post-management/edit-post-detail/:postId'>
               <EditPostDetail />
-          </Route>
+          </Route> */}
           <Route path='/user-management'>
             <UserManagement />
           </Route>

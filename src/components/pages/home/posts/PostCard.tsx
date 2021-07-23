@@ -5,7 +5,6 @@ import CardHeader from "@material-ui/core/CardHeader";
 import CardMedia from "@material-ui/core/CardMedia";
 import CardContent from "@material-ui/core/CardContent";
 import CardActions from "@material-ui/core/CardActions";
-import Avatar from "@material-ui/core/Avatar";
 import Typography from "@material-ui/core/Typography";
 import { red } from "@material-ui/core/colors";
 import { Button } from "@material-ui/core";
@@ -44,11 +43,11 @@ export default function PostCard(props: Props) {
   return (
     <Card className={classes.root}>
       <CardHeader
-        avatar={
-          <Avatar aria-label="recipe" className={classes.avatar}>
+        // avatar={
+        //   <Avatar aria-label="recipe" className={classes.avatar}>
             
-          </Avatar>
-        }
+        //   </Avatar>
+        // }
 
         title={`${props.post.user?.firstName} ${props.post.user?.lastName}`}
         subheader={props.post.createAt}

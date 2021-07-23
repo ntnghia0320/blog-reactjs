@@ -1,19 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import categoryService from "../../../../services/category.service";
 import postService from "../../../../services/post.service";
 import AddTag from "../add-post/add-tags/AddTag";
 
-interface ParamTypes {
-    postId?: string
-}
+interface Props {
+    postId: number;
+  }
 
-const EditPostDetail = () => {
+const EditPostDetail = (props: Props) => {
     const postDefault: Post = {} as Post;
     const categoriesDefalut: Category[] = [];
     const tagsDefault: Tag[] = [];
     const categoryDefault: Category = {} as Category;
-    const params = useParams<ParamTypes>();
 
     const [post, setPost] = useState(postDefault);
     const [category, setCategory] = useState(categoryDefault);
@@ -21,7 +19,7 @@ const EditPostDetail = () => {
     const [tags, setTags] = useState(tagsDefault);
 
     useEffect(() => {
-        postService.getPostById(Number(params.postId)).then(
+        postService.getPostById(props.postId).then(
             (res) => {
                 setPost(res);
                 setTags(res.tags);
@@ -42,7 +40,7 @@ const EditPostDetail = () => {
         );
         console.log('edit post detail');
 
-    }, [params.postId]);
+    }, [props.postId]);
 
     const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setPost({ ...post, [event.target.name]: event.target.value });
@@ -61,7 +59,7 @@ const EditPostDetail = () => {
         post.category = category;
         // alert(JSON.stringify(post)+categoryId);
 
-        postService.updatePost(post, Number(params.postId)).then(
+        postService.updatePost(post, props.postId).then(
             (response) => {
                 // history.push("/home");
                 alert(JSON.stringify(response));
@@ -136,7 +134,7 @@ const EditPostDetail = () => {
                         tags.map(tag => (
                             <li key={tag.name}>
                                 <p >{tag.name}</p>
-                                <a href={`/post-management/edit-post-detail/${params.postId}/delete-tag`} onClick={(event) => deleteTag(event, tag.name)}>Delete</a>
+                                <a href={`/post-management/edit-post-detail/${props.postId}/delete-tag`} onClick={(event) => deleteTag(event, tag.name)}>Delete</a>
                             </li>
                         ))
                     }

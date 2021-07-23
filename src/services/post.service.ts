@@ -9,6 +9,11 @@ const getAllPost = async () => {
   return response.data;
 };
 
+const getAllPostActive = async () => {
+  const response = await axios.get(API_URL + '/active-post');
+  return response.data;
+};
+
 const getPostById = async (postId: number) => {
   const response = await axios.get(API_URL + `/${postId}`);
   return response.data;
@@ -23,6 +28,11 @@ const getPostsByCategoryId = async (categoryId: number) => {
   const response = await axios.get(API_URL + `/category/${categoryId}`);
   return response.data;
 };
+
+const getPostsByKeyword = async (keyword: string) => {
+  const response = await axios.get(API_URL + `/search?keyword=${keyword}`);
+  return response.data;
+}
 
 const postPosts = async (post: Post, categoryId: number) => {
     const response = await axios.post(API_URL + `/${categoryId}/${currentUser().userId}`, JSON.stringify(post), { headers: authHeader() });
@@ -41,6 +51,8 @@ const deletePost = async (postId: number) => {
 
 const postService = {
     getAllPost,
+    getAllPostActive,
+    getPostsByKeyword,
     postPosts,
     getPostsByUserId,
     updatePost,

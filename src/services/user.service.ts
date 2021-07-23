@@ -1,18 +1,21 @@
 import axios from "axios";
 import authHeader from "./auth-header";
 
-const API_URL = "http://localhost:8080/api/";
+const API_URL = "http://localhost:8080/api/users";
 
-const getPublicContent = () => {
-  return axios.get(API_URL + "all");
+const getUsers = async () => {
+  const response = await axios.get(API_URL, { headers: authHeader() });
+  return response.data;
 };
 
-const getUserBoard = () => {
-  return axios.get(API_URL + "user", { headers: authHeader() });
+const updateUser = async ( user: User, userId: number) => {
+  const response = await axios.put(API_URL + `/${userId}`, JSON.stringify(user), { headers: authHeader() });
+  return response.data;
 };
 
-const getAdminBoard = () => {
-  return axios.get(API_URL + "user", { headers: authHeader() });
+const setRoleUser = async (userId: number, roleId: number) => {
+  const response = await axios.put(API_URL + `/${userId}/set-role/${roleId}`, JSON.stringify(`{name: 'asas'}`), { headers: authHeader() });
+  return response.data;
 };
 
 const logOut = () => {
@@ -20,9 +23,9 @@ const logOut = () => {
 }
 
 const userService = {
-  getPublicContent,
-  getUserBoard,
-  getAdminBoard,
+  setRoleUser,
+  updateUser,
+  getUsers,
   logOut
 };
 
