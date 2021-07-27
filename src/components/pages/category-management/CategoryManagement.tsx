@@ -9,22 +9,14 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import AddIcon from '@material-ui/icons/Add';
 import Fab from '@material-ui/core/Fab';
-import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import IconButton from '@material-ui/core/IconButton';
-import VisibilityIcon from '@material-ui/icons/Visibility';
 import Tooltip from '@material-ui/core/Tooltip';
 import { Backdrop, Fade, Modal } from '@material-ui/core';
-import AddPost from './add-post/AddPost';
-import EditPostDetail from './edit-post/EditPostDetail';
-import postService from '../../../services/post.service';
 import { NavLink } from 'react-router-dom';
-import Dialog from '@material-ui/core/Dialog';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import Button from '@material-ui/core/Button';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
+import categoryService from '../../../services/category.service';
+import AddCategory from './add-category/AddCategory';
+import EditCategoryDetail from './edit-category/EditCategoryDetail';
 
 const StyledTableCell = withStyles((theme: Theme) =>
   createStyles({
@@ -68,9 +60,8 @@ const useStyles = makeStyles((theme: Theme) =>
           justifyContent: 'center',
         },
         paper: {
-          width: '90%',
-          height: '90%',
-          overflow: 'scroll',
+          width: '30%',
+          height: '30%',
           backgroundColor: theme.palette.background.paper,
           border: '2px solid #333333',
           borderRadius: 8,
@@ -80,19 +71,18 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-export default function PostManagement() {
+export default function CategoryManagement() {
   const classes = useStyles();
   const [isModalAddPostOpen, setIsModalAddPostOpen] = React.useState(false);
   const [isModalEditPostOpen, setIsModalEditPostOpen] = React.useState(false);
-  const [postId, setPostId] = React.useState(-1);
-  const postDefault: Post[] = [];
-  const [posts, setPosts] = useState(postDefault);
-  const [openDialog, setOpenDialog] = React.useState(false);
+  const [categoryId, setCategoryId] = React.useState(-1);
+  const postDefault: Category[] = [];
+  const [categories, setCategories] = useState(postDefault);
 
     useEffect(() => {
-        postService.getPostsByUserId().then(
+        categoryService.getCategories().then(
             (res) => {
-                setPosts(res);
+                setCategories(res);
             },
             (error) => {
                 alert(error.message)
@@ -109,8 +99,8 @@ export default function PostManagement() {
     setIsModalAddPostOpen(false);
   };
 
-  const openModalEditPost = (postId: number) => {
-    setPostId(postId);
+  const openModalEditPost = (categoryId: number) => {
+    setCategoryId(categoryId);
     setIsModalEditPostOpen(true);
   };
 
@@ -118,79 +108,29 @@ export default function PostManagement() {
     setIsModalEditPostOpen(false);
   };
 
-  const deletePost = (postId: any) => {
-    setPostId(postId);
-    setOpenDialog(true);
-}
-const handleCloseDialog = () => {
-  setOpenDialog(false);
-}
-
-const handleSure = () =>{
-  postService.deletePost(postId).then(
-    (res) => {
-        window.location.reload();
-    },
-    (error) => {
-        alert(error.message)
-    }
-);
-  setOpenDialog(false);
-}
-
-const handleNotSure = () =>{
-  setOpenDialog(false);
-}
-
   return (
     <>
         <TableContainer component={Paper}>
         <Table className={classes.table} aria-label="customized table">
             <TableHead>
             <TableRow>
-                <StyledTableCell>Title</StyledTableCell>
-                <StyledTableCell align="right">Status </StyledTableCell>
-                <StyledTableCell align="right">View <span>&emsp;</span></StyledTableCell>
+                <StyledTableCell>Name</StyledTableCell>
                 <StyledTableCell align="right">Edit <span>&emsp;</span></StyledTableCell>
-                <StyledTableCell align="right">Delete <span>&emsp;</span></StyledTableCell>
             </TableRow>
             </TableHead>
             <TableBody>
-            {posts.map((post) => (
-                <StyledTableRow key={post.id}>
-                <StyledTableCell component="th" scope="row">{post.title}</StyledTableCell>
-                <StyledTableCell align="right">{post.active ? 'Active' : 'Not Active'}</StyledTableCell>
-                <StyledTableCell align="right">
-                    <Tooltip title="View">
-                        <IconButton
-                            aria-label="view"
-                            component={NavLink}
-                            to={`/post/${post.id}`}
-                        >
-                          <VisibilityIcon />
-                        </IconButton>
-                    </Tooltip>
-                </StyledTableCell>
+            {categories.map((categoty) => (
+                <StyledTableRow key={categoty.id}>
+                <StyledTableCell component="th" scope="row">{categoty.name}</StyledTableCell>
                 <StyledTableCell align="right">
                     <Tooltip title="Edit">
                         <IconButton
-                            onClick={() => openModalEditPost(Number(post.id))}
+                            onClick={() => openModalEditPost(Number(categoty.id))}
                             aria-label="edit"
                         >
                             <EditIcon />
                         </IconButton>
                     </Tooltip>
-                </StyledTableCell>
-                <StyledTableCell align="right">
-                    <Tooltip title="Delete">
-                        <IconButton
-                            onClick={() => deletePost(post.id)}
-                            aria-label="delete"
-                        >
-                            <DeleteIcon />
-                        </IconButton>
-                    </Tooltip>
-                    <span>&emsp;</span>
                 </StyledTableCell>
                 </StyledTableRow>
             ))}
@@ -199,13 +139,11 @@ const handleNotSure = () =>{
         </TableContainer>
 
         <div>
-            <Tooltip title="Add" aria-label="add">
-                <IconButton onClick={openModalAddPost}>
-                    <Fab color="primary" className={classes.absolute}>
-                        <AddIcon />
-                    </Fab>
-                </IconButton>
-            </Tooltip>
+          <IconButton onClick={openModalAddPost}>
+              <Fab color="primary" className={classes.absolute}>
+                  <AddIcon />
+              </Fab>
+          </IconButton>
         </div>
 
         <Modal
@@ -222,7 +160,7 @@ const handleNotSure = () =>{
         >
           <Fade in={isModalAddPostOpen}>
           <div className={classes.paper}>
-            <AddPost />
+            <AddCategory />                                                     
           </div>
         </Fade>
       </Modal>
@@ -240,31 +178,10 @@ const handleNotSure = () =>{
         >
           <Fade in={isModalEditPostOpen}>
           <div className={classes.paper}>
-            <EditPostDetail postId={postId} />
+            <EditCategoryDetail categoryId={categoryId} />
           </div>
         </Fade>
       </Modal>
-      <Dialog
-        open={openDialog}
-        onClose={handleCloseDialog}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">{"Delete post"}</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            Do you want to delete this post?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleNotSure} color="primary">
-            No
-          </Button>
-          <Button onClick={handleSure} color="primary" autoFocus>
-            Yes
-          </Button>
-        </DialogActions>
-      </Dialog>
     </>
   );
 }

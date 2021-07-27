@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme: Theme) =>
             textAlign: 'left'
         },
         createAt: {
-            left: 0,
+            fontSize: 17,
         },
         userName: {
             fontSize: 25
@@ -73,27 +73,33 @@ export default function PostDetail() {
     return (
         <div className={classes.root}>
             <Grid container spacing={1}>
-                <Grid item xs={12} md={9}>
+                <Grid item xs={12} md={12}>
                     <Paper className={classes.paper}>
                         <h1>{post.title}</h1>
+                        <br />
+                        <p className={classes.createAt}>{'Create at: ' + new Date(post.createAt).toLocaleString()}</p>
                         <br />
                         <img className={classes.image} src={post.linkImage} alt="" />
                         <br />
                         <p className={classes.content}>{post.content}</p>
-                        <br />
-                        <p className={classes.createAt}>{'Create at: ' + post.createAt}</p>
                     </Paper>
                 </Grid>
-                <Grid item xs={12} md={3}>
+                <Grid item xs={12} md={12}>
                     <Paper className={classes.paper}>
+                        
+                    <Divider />
                         <p className={classes.userName}>
                             {`Author: ${post.user?.firstName} ${post.user?.lastName}`}
                         </p>
                         {post.user?.email}
                         <br />
-                        <h2>Tags</h2>
-                        <Divider />
                         <br />
+                        <Divider />
+                        <p>
+                            {`Category: ${post.category?.name}`}
+                        </p>
+                        <Divider />
+                        <h2>Tags</h2>
                         <div className={classes.tags}>
                             {post.tags && post.tags.map(tag => (
                                 <div className={classes.tag}>{tag.name}</div>

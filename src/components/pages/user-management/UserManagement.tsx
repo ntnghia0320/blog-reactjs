@@ -7,7 +7,6 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import EditIcon from '@material-ui/icons/Edit';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import userService from '../../../services/user.service';
@@ -95,12 +94,13 @@ export default function UserManagement() {
                 <StyledTableCell align="right">{user.email}</StyledTableCell>
                 <StyledTableCell align="right">{user.role.name}</StyledTableCell>
                 <StyledTableCell align="right">
-                    <Tooltip title="Set role">
+                    <Tooltip title={user.role.id === 1 ? 'Set role user' : 'Set role admin' }>
                         <IconButton
-                            onClick={() => setRole(Number(user.id), Number(user.role.id))}
-                            aria-label="set-role"
+                          onClick={() => setRole(Number(user.id), Number(user.role.id))}
+                          aria-label="set-role"
+                          size="small"
                         >
-                            <EditIcon />
+                          {user.role.id === 1 ? 'Set role user' : 'Set role admin' }
                         </IconButton>
                     </Tooltip>
                 </StyledTableCell>

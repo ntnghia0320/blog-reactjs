@@ -6,7 +6,6 @@ import CardMedia from "@material-ui/core/CardMedia";
 import CardContent from "@material-ui/core/CardContent";
 import CardActions from "@material-ui/core/CardActions";
 import Typography from "@material-ui/core/Typography";
-import { red } from "@material-ui/core/colors";
 import { Button } from "@material-ui/core";
 import { NavLink } from "react-router-dom";
 
@@ -31,8 +30,13 @@ const useStyles = makeStyles((theme: Theme) =>
     expand: {
       marginLeft: "auto"
     },
-    avatar: {
-      backgroundColor: red[500]
+    cardHeader: {
+      height: '20%',
+      color: '#333333'
+    },
+    cardAction:{
+      marginLeft: '70%',
+      color: 'rgb(114 137 198 / 1)',
     }
   })
 );
@@ -43,14 +47,9 @@ export default function PostCard(props: Props) {
   return (
     <Card className={classes.root}>
       <CardHeader
-        // avatar={
-        //   <Avatar aria-label="recipe" className={classes.avatar}>
-            
-        //   </Avatar>
-        // }
-
-        title={`${props.post.user?.firstName} ${props.post.user?.lastName}`}
-        subheader={props.post.createAt}
+        className={classes.cardHeader}
+        titleTypographyProps={{variant:'subtitle1' }}
+        title={props.post.title.length < 63 ? props.post.title : `${props.post.title.substring(0,63)}...`}
       />
       <CardMedia
         className={classes.media}
@@ -58,10 +57,10 @@ export default function PostCard(props: Props) {
       />
       <CardContent>
         <Typography variant="body2" color="textSecondary" component="p">
-          {props.post.title}
+          {`${props.post.user?.firstName} ${props.post.user?.lastName}`}
         </Typography>
       </CardContent>
-      <CardActions disableSpacing>
+      <CardActions disableSpacing className={classes.cardAction}>
         <Button
           size='small'
           color="inherit"

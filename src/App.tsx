@@ -15,7 +15,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import MoreIcon from '@material-ui/icons/MoreVert';
-import { NavLink, Redirect, Route, Switch } from 'react-router-dom';
+import { NavLink, Redirect, Route, Switch, useLocation } from 'react-router-dom';
 import Login from './components/pages/login/login';
 import NotFound from './components/pages/not-found/NotFound';
 import Profile from './components/pages/profile/Profile';
@@ -33,8 +33,10 @@ import AddPost from './components/pages/post-management/add-post/AddPost';
 import EditPostList from './components/pages/post-management/edit-post/EditPostList';
 import PostManagement from './components/pages/post-management/PostManagement';
 import PostListFindByKeyword from './components/pages/home/posts/PostListFindByKeyword';
+import CategoryManagement from './components/pages/category-management/CategoryManagement';
 
 const drawerWidth = 240;
+const path = ['/home', '/category', '/post', '/posts'];
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -55,6 +57,14 @@ const useStyles = makeStyles((theme: Theme) =>
       [theme.breakpoints.up('sm')]: {
         width: `calc(100% - ${drawerWidth}px)`,
         marginLeft: drawerWidth,
+        backgroundImage: 'linear-gradient(to bottom right, #fdfcfb, #e2d1c3)',
+        color: '#333333'
+      },
+      backgroundImage: 'linear-gradient(to bottom right, #fdfcfb, #e2d1c3)',
+      color: '#333333'
+    },
+    appBarFull: {
+      [theme.breakpoints.up('sm')]: {
         backgroundImage: 'linear-gradient(to bottom right, #fdfcfb, #e2d1c3)',
         color: '#333333'
       },
@@ -148,6 +158,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export default function App() {
+  const location = useLocation();
   const [isUser, setIsUser] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const userFromLocalStorage = localStorage.getItem('user');
@@ -230,7 +241,7 @@ export default function App() {
                   component={NavLink}
                   to="/verify-post"
                 >
-                  Verify Post
+                  Active Post
                 </Button>
               </MenuItem>
               </>
@@ -298,31 +309,7 @@ export default function App() {
       </div>
       <Divider />
       <Switch>
-        <Route path={['/home', '/category', '/post', '/posts']}>
-          <Category />
-        </Route>
-        {/* <Route path='/post-management'>
-          <List>
-            <ListItem
-                button
-                key={1}
-                component={NavLink}
-                activeClassName={classes.highlighted}
-                to={`/post-management/add-post`}
-            >
-                <ListItemText primary={'Add post'} />
-            </ListItem>
-            <ListItem
-                button
-                key={2}
-                component={NavLink}
-                activeClassName={classes.highlighted}
-                to={`/post-management/edit-post`}
-            >
-                <ListItemText primary={'Edit post'} />
-            </ListItem>
-        </List>
-        </Route> */}
+        <Category />
       </Switch>
     </div>
   );
@@ -332,17 +319,19 @@ export default function App() {
   return (
     <div className={classes.root}>
       <CssBaseline />
-      <AppBar position="fixed" className={classes.appBar}>
+      <AppBar position="fixed" className={path.includes(location.pathname) ? classes.appBar : classes.appBarFull}>
         <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerToggle}
-            className={classes.menuButton}
-          >
-            <MenuIcon />
-          </IconButton>
+          <Route path={['/home', '/category', '/post', '/posts']}>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              edge="start"
+              onClick={handleDrawerToggle}
+              className={classes.menuButton}
+            >
+              <MenuIcon />
+            </IconButton>
+          </Route>
           <IconButton
             color="inherit"
             component={NavLink}
@@ -354,21 +343,23 @@ export default function App() {
           <Typography className={classes.title} variant="h6" noWrap>
             NghiaNguyen Blog
           </Typography>
-          <div className={classes.search}>
-            <div className={classes.searchIcon}>
-              <SearchIcon />
+          <Route path={['/home', '/category', '/post', '/posts']}>
+            <div className={classes.search}>
+              <div className={classes.searchIcon}>
+                <SearchIcon />
+              </div>
+              <InputBase
+                placeholder="Search…"
+                classes={{
+                  root: classes.inputRoot,
+                  input: classes.inputInput,
+                }}
+                inputProps={{ 'aria-label': 'search' }}
+                onKeyDown={handleKeyDown}
+                onChange={onChange}
+              />
             </div>
-            <InputBase
-              placeholder="Search…"
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput,
-              }}
-              inputProps={{ 'aria-label': 'search' }}
-              onKeyDown={handleKeyDown}
-              onChange={onChange}
-            />
-          </div>
+          </Route>
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
             {isUser && (
@@ -394,6 +385,22 @@ export default function App() {
 
             {isAdmin && (
               <>
+              <Button
+                  color="inherit"
+                  component={NavLink}
+                  activeClassName={classes.highlighted}
+                  to="/post-management"
+                >
+                  Post Management
+                </Button>
+                <Button
+                  color="inherit"
+                  component={NavLink}
+                  activeClassName={classes.highlighted}
+                  to="/category-management"
+                >
+                  Category Management
+                </Button>
                 <Button
                   color="inherit"
                   component={NavLink}
@@ -408,7 +415,23 @@ export default function App() {
                   activeClassName={classes.highlighted}
                   to="/verify-post"
                 >
-                  Verify Post
+                  Active Post
+                </Button>
+                <Button
+                  color="inherit"
+                  component={NavLink}
+                  activeClassName={classes.highlighted}
+                  to="/profile"
+                >
+                  Profile
+                </Button>
+                <Button
+                  color="inherit"
+                  component={NavLink}
+                  activeClassName={classes.highlighted}
+                  to="/category-management"
+                >
+                  Profile
                 </Button>
               </>
             )}
@@ -455,37 +478,39 @@ export default function App() {
         </Toolbar>
       </AppBar>
       {renderMobileMenu}
-      <nav className={classes.drawer} aria-label="mailbox folders">
-        {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
-        <Hidden smUp implementation="css">
-          <Drawer
-            container={container}
-            variant="temporary"
-            anchor={theme.direction === 'rtl' ? 'right' : 'left'}
-            open={mobileOpen}
-            onClose={handleDrawerToggle}
-            classes={{
-              paper: classes.drawerPaper,
-            }}
-            ModalProps={{
-              keepMounted: true, // Better open performance on mobile.
-            }}
-          >
-            {drawer}
-          </Drawer>
-        </Hidden>
-        <Hidden xsDown implementation="css">
-          <Drawer
-            classes={{
-              paper: classes.drawerPaper,
-            }}
-            variant="permanent"
-            open
-          >
-            {drawer}
-          </Drawer>
-        </Hidden>
-      </nav>
+      <Route path={['/home', '/category', '/post', '/posts']}>
+        <nav className={classes.drawer} aria-label="mailbox folders">
+          {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
+          <Hidden smUp implementation="css">
+            <Drawer
+              container={container}
+              variant="temporary"
+              anchor={theme.direction === 'rtl' ? 'right' : 'left'}
+              open={mobileOpen}
+              onClose={handleDrawerToggle}
+              classes={{
+                paper: classes.drawerPaper,
+              }}
+              ModalProps={{
+                keepMounted: true, // Better open performance on mobile.
+              }}
+            >
+              {drawer}
+            </Drawer>
+          </Hidden>
+          <Hidden xsDown implementation="css">
+            <Drawer
+              classes={{
+                paper: classes.drawerPaper,
+              }}
+              variant="permanent"
+              open
+            >
+              {drawer}
+            </Drawer>
+          </Hidden>
+        </nav>
+      </Route>
       <main className={classes.content}>
         <div className={classes.toolbar} />
         <Switch>
@@ -513,15 +538,9 @@ export default function App() {
           <Route exact path='/post-management'>
             <PostManagement />
           </Route>
-          <Route path='/post-management/add-post'>
-              <AddPost />
+          <Route exact path='/category-management'>
+            <CategoryManagement />
           </Route>
-          <Route path='/post-management/edit-post'>
-              <EditPostList />
-          </Route>
-          {/* <Route path='/post-management/edit-post-detail/:postId'>
-              <EditPostDetail />
-          </Route> */}
           <Route path='/user-management'>
             <UserManagement />
           </Route>

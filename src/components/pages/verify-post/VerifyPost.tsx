@@ -8,7 +8,8 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import VisibilityIcon from '@material-ui/icons/Visibility';
-import EditIcon from '@material-ui/icons/Edit';
+import CheckIcon from '@material-ui/icons/Check';
+import ClearIcon from '@material-ui/icons/Clear';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import postService from '../../../services/post.service';
@@ -93,12 +94,11 @@ export default function VerifyPost() {
                 <StyledTableCell component="th" scope="row">{post.title}</StyledTableCell>
                 <StyledTableCell align="right">{post.active ? 'Active' : 'Not Active'}</StyledTableCell>
                 <StyledTableCell align="right">
-                    <Tooltip title="Edit">
+                    <Tooltip title={post.active ? 'Inactive' : 'Active'}>
                         <IconButton
                             onClick={() => activePost(post, Number(post.id))}
-                            aria-label="edit"
                         >
-                            <EditIcon />
+                            {post.active ? <ClearIcon />  : <CheckIcon />}
                         </IconButton>
                     </Tooltip>
                 </StyledTableCell>
